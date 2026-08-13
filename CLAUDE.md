@@ -10,15 +10,6 @@ Arcade Vault ("Es una plataforma para jugar online y competir por la mayor canti
 
 Stack: Next.js 16 (App Router), React 19, TypeScript, Tailwind CSS v4, ESLint 9 flat config.
 
-## Commands
-
-```bash
-npm run dev      # start dev server (Turbopack)
-npm run build    # production build
-npm run start    # run production build
-npm run lint     # eslint
-```
-
 There is no test runner configured yet.
 
 ## Working in this repo
