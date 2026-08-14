@@ -1,6 +1,6 @@
 # 01 — Pantallas MVP visual
 
-- **Estado:** Aprobado
+- **Estado:** Implementado
 - **Depende de:** ninguno
 - **Fecha:** 2026-08-12
 - **Objetivo:** Implementar, solo a nivel visual y sin lógica de juego real, las cinco pantallas del MVP de Arcade Vault (Biblioteca, Detalle de juego, Reproductor, Salón de la Fama y Auth) migrando los templates de referencia a Next.js 16 App Router con rutas reales en español.
@@ -56,17 +56,17 @@ Persistencia real vía `localStorage` limitada a una sola clave: `av_scores`, es
 
 ## Criterios de aceptación
 
-- [ ] `/biblioteca` renderiza el hero, buscador funcional (filtra por texto), chips de categoría funcionales (filtran por categoría) y grilla de tarjetas de juego con datos de `GAMES`.
-- [ ] Cada tarjeta de juego navega a `/juegos/[id]` al hacer click (en la tarjeta o en el botón "JUGAR").
-- [ ] `/juegos/[id]` muestra info del juego correcto, tabla de mejores puntuaciones generada con `seededScores`, y botones "JUGAR AHORA" (→ `/jugar/[id]`) y "VOLVER AL VAULT" (→ `/biblioteca`).
-- [ ] `/jugar/[id]` muestra el HUD con jugador "INVITADO", puntuación que se incrementa sola cada ~220ms, botones Pausa/Fin/Salir funcionales, y al pulsar "FIN" se abre el modal de fin de partida.
-- [ ] En el modal de fin de partida, guardar la puntuación escribe una entrada en `localStorage` bajo `av_scores` y muestra el mensaje de confirmación; los botones "JUGAR DE NUEVO" y "VOLVER AL VAULT" funcionan.
-- [ ] `/salon` muestra tabs por cada juego de `GAMES`, y al cambiar de tab se regenera el podio (top 3) y la tabla de ranking (12 filas) sin la fila "tu mejor marca".
-- [ ] `/auth` muestra los tabs "Iniciar sesión"/"Crear cuenta" (el segundo agrega el campo correo), el botón "Jugar como invitado", y los botones sociales decorativos; ningún envío del formulario persiste usuario ni cambia el Nav.
-- [ ] El Nav aparece en las 5 pantallas, siempre en estado "invitado" (botón "Iniciar Sesión"), con links a Biblioteca y Salón de la Fama funcionales, y el menú móvil (hamburguesa) abre/cierra correctamente.
-- [ ] Los estilos visuales (neón, CRT, pixel font, animaciones) coinciden con `references/templates/Arcade Vault.html` al comparar lado a lado.
-- [ ] `npm run build` completa sin errores de TypeScript ni de ESLint.
-- [ ] No hay errores en la consola del navegador al navegar por las 5 pantallas.
+- [x] `/biblioteca` renderiza el hero, buscador funcional (filtra por texto), chips de categoría funcionales (filtran por categoría) y grilla de tarjetas de juego con datos de `GAMES`.
+- [x] Cada tarjeta de juego navega a `/juegos/[id]` al hacer click (en la tarjeta o en el botón "JUGAR").
+- [x] `/juegos/[id]` muestra info del juego correcto, tabla de mejores puntuaciones generada con `seededScores`, y botones "JUGAR AHORA" (→ `/jugar/[id]`) y "VOLVER AL VAULT" (→ `/biblioteca`).
+- [x] `/jugar/[id]` muestra el HUD con jugador "INVITADO", puntuación que se incrementa sola cada ~220ms, botones Pausa/Fin/Salir funcionales, y al pulsar "FIN" se abre el modal de fin de partida.
+- [x] En el modal de fin de partida, guardar la puntuación escribe una entrada en `localStorage` bajo `av_scores` y muestra el mensaje de confirmación; los botones "JUGAR DE NUEVO" y "VOLVER AL VAULT" funcionan.
+- [x] `/salon` muestra tabs por cada juego de `GAMES`, y al cambiar de tab se regenera el podio (top 3) y la tabla de ranking (12 filas) sin la fila "tu mejor marca".
+- [x] `/auth` muestra los tabs "Iniciar sesión"/"Crear cuenta" (el segundo agrega el campo correo), el botón "Jugar como invitado", y los botones sociales decorativos; ningún envío del formulario persiste usuario ni cambia el Nav.
+- [x] El Nav aparece en las 5 pantallas, siempre en estado "invitado" (botón "Iniciar Sesión"), con links a Biblioteca y Salón de la Fama funcionales, y el menú móvil (hamburguesa) abre/cierra correctamente.
+- [x] Los estilos visuales (neón, CRT, pixel font, animaciones) coinciden con `references/templates/Arcade Vault.html` al comparar lado a lado.
+- [x] `npm run build` completa sin errores de TypeScript ni de ESLint.
+- [x] No hay errores en la consola del navegador al navegar por las 5 pantallas.
 
 ## Decisiones tomadas y descartadas
 
