@@ -1,20 +1,21 @@
 "use client";
-
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
 import type { Game } from "@/lib/data";
-
+import Asteroids from "@/components/games/asteroids/Asteroids";
 export default function Reproductor({ game }: { game: Game }) {
+  const isAsteroids = game.id === "asteroids";
   const [score, setScore] = useState(0);
-  const [lives] = useState(3);
+  const [lives, setLives] = useState(3);
   const [level, setLevel] = useState(1);
   const [paused, setPaused] = useState(false);
   const [over, setOver] = useState(false);
   const [name, setName] = useState("INVITADO");
   const [saved, setSaved] = useState(false);
-
+  // Cambiar este valor remonta <Asteroids> y arranca una partida nueva.
+  const [runKey, setRunKey] = useState(0);
   useEffect(() => {
-    if (over || paused) return;
+    if (over || paused || isAsteroids) return;
     const t = setInterval(() => {
       setScore((s) => {
         const next = s + Math.floor(10 + Math.random() * 90);
@@ -23,17 +24,21 @@ export default function Reproductor({ game }: { game: Game }) {
       });
     }, 220);
     return () => clearInterval(t);
-  }, [over, paused]);
-
+  }, [over, paused, isAsteroids]);
+  const handleGameOver = useCallback((finalScore: number) => {
+    setScore(finalScore);
+    setOver(true);
+  }, []);
   const endGame = () => setOver(true);
   const restart = () => {
     setScore(0);
+    setLives(3);
     setLevel(1);
     setPaused(false);
     setOver(false);
     setSaved(false);
+    setRunKey((k) => k + 1);
   };
-
   const saveScore = () => {
     try {
       const all = JSON.parse(localStorage.getItem("av_scores") || "[]");
@@ -44,7 +49,6 @@ export default function Reproductor({ game }: { game: Game }) {
     }
     setSaved(true);
   };
-
   return (
     <div className="av-player fade-in">
       <div className="player-hud">
@@ -80,18 +84,31 @@ export default function Reproductor({ game }: { game: Game }) {
           </Link>
         </div>
       </div>
-
       <div className="crt">
         <div className="crt-screen">
-          <div className="game-arena">
-            <div className="grid-floor"></div>
-            <div className="enemy e1"></div>
-            <div className="enemy e2"></div>
-            <div className="enemy e3"></div>
-            <div className="player-ship"></div>
-          </div>
+          {isAsteroids ? (
+            <Asteroids
+              key={runKey}
+              paused={paused || over}
+              onScore={setScore}
+              onLives={setLives}
+              onLevel={setLevel}
+              onGameOver={handleGameOver}
+            />
+          ) : (
+            <div className="game-arena">
+              <div className="grid-floor"></div>
+              <div className="enemy e1"></div>
+              <div className="enemy e2"></div>
+              <div className="enemy e3"></div>
+              <div className="player-ship"></div>
+            </div>
+          )}
           {paused && (
-            <div className="crt-content" style={{ background: "rgba(0,0,0,0.6)", zIndex: 5 }}>
+            <div
+              className="crt-content"
+              style={{ background: "rgba(0,0,0,0.6)", zIndex: 5 }}
+            >
               <div>
                 <div className="pixel neon-yellow" style={{ fontSize: 22 }}>
                   EN PAUSA
@@ -117,7 +134,6 @@ export default function Reproductor({ game }: { game: Game }) {
           <span>CARGA · 1MB</span>
         </div>
       </div>
-
       {over && (
         <div className="modal-bd">
           <div className="modal">
@@ -128,7 +144,9 @@ export default function Reproductor({ game }: { game: Game }) {
               <div className="input-row">
                 <input
                   value={name}
-                  onChange={(e) => setName(e.target.value.toUpperCase().slice(0, 10))}
+                  onChange={(e) =>
+                    setName(e.target.value.toUpperCase().slice(0, 10))
+                  }
                   placeholder="TUS INICIALES"
                 />
                 <button className="btn yellow" onClick={saveScore}>
