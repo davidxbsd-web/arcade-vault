@@ -1,6 +1,6 @@
 # 05 — Juego Asteroids (jugable)
 
-- **Estado:** Aprobado
+- **Estado:** Implementado
 - **Depende de:** SPEC 01, SPEC 02
 - **Fecha:** 2026-09-09
 - **Objetivo:** Portar el juego de canvas `references/started-games/02-asteroids/game.js` a TypeScript como un componente React montado condicionalmente en el Reproductor, y darlo de alta como un juego nuevo (`asteroids`) del catálogo, jugable de verdad en `/jugar/asteroids`.
@@ -107,19 +107,19 @@ Escritura en `localStorage`: solo la clave `av_scores`, y solo desde el botón "
 
 ## Criterios de aceptación
 
-- [ ] `GAMES` en `lib/data.ts` tiene 9 entradas; la nueva es `id: "asteroids"`, `title: "ASTEROIDS"`, `cover: "cover-rocas"`.
-- [ ] `/juegos/asteroids` responde 200 y muestra el detalle con la portada de `cover-rocas`; `/biblioteca` y `/salon` incluyen "ASTEROIDS" sin cambios de código en esas páginas.
-- [ ] `/jugar/asteroids` renderiza un `<canvas>` jugable dentro de la pantalla CRT (no la `game-arena` decorativa).
-- [ ] Con el foco en la página, `←`/`→` rotan la nave, `↑` propulsa y `Espacio` dispara, y esas teclas no hacen scroll de la página.
-- [ ] Disparar a un asteroide grande lo parte en medianos, y los medianos en pequeños; la puntuación sube según `POINTS` y se refleja en el HUD del Reproductor.
-- [ ] Existe el power-up 3x: al recogerlo, el disparo pasa a triple durante unos segundos.
-- [ ] El HUD del Reproductor muestra puntuación, vidas y nivel provenientes del juego real (no del `setInterval`); las vidas empiezan en 3 y bajan al chocar.
-- [ ] "PAUSA" congela el juego (con overlay "EN PAUSA") y "REANUDAR" lo continúa sin un salto brusco de simulación.
-- [ ] Al perder la 3ª vida se abre el modal "FIN DEL JUEGO" con la puntuación final; el canvas no muestra su propio overlay "GAME OVER" ni se reinicia solo con Espacio.
-- [ ] "GUARDAR PUNTUACIÓN" añade una entrada a `localStorage.av_scores` con `{ game: "asteroids", score, name, at }`; "JUGAR DE NUEVO" reinicia una partida nueva desde 0.
-- [ ] `/jugar/rocas` (y cualquier otro `id`) sigue mostrando la simulación mock con marcador automático, sin regresiones.
-- [ ] Al salir de `/jugar/asteroids` (navegar fuera) se cancela el `requestAnimationFrame` y se quitan los listeners de teclado (sin fugas ni errores en consola).
-- [ ] `npm run build` completa sin errores de TypeScript ni de ESLint y no hay errores en la consola del navegador.
+- [x] `GAMES` en `lib/data.ts` tiene 9 entradas; la nueva es `id: "asteroids"`, `title: "ASTEROIDS"`, `cover: "cover-rocas"`.
+- [x] `/juegos/asteroids` responde 200 y muestra el detalle con la portada de `cover-rocas`; `/biblioteca` y `/salon` incluyen "ASTEROIDS" sin cambios de código en esas páginas.
+- [x] `/jugar/asteroids` renderiza un `<canvas>` jugable dentro de la pantalla CRT (no la `game-arena` decorativa).
+- [x] Con el foco en la página, `←`/`→` rotan la nave, `↑` propulsa y `Espacio` dispara, y esas teclas no hacen scroll de la página.
+- [x] Disparar a un asteroide grande lo parte en medianos, y los medianos en pequeños; la puntuación sube según `POINTS` y se refleja en el HUD del Reproductor.
+- [x] Existe el power-up 3x: al recogerlo, el disparo pasa a triple durante unos segundos.
+- [x] El HUD del Reproductor muestra puntuación, vidas y nivel provenientes del juego real (no del `setInterval`); las vidas empiezan en 3 y bajan al chocar.
+- [x] "PAUSA" congela el juego (con overlay "EN PAUSA") y "REANUDAR" lo continúa sin un salto brusco de simulación.
+- [x] Al perder la 3ª vida se abre el modal "FIN DEL JUEGO" con la puntuación final; el canvas no muestra su propio overlay "GAME OVER" ni se reinicia solo con Espacio.
+- [x] "GUARDAR PUNTUACIÓN" añade una entrada a `localStorage.av_scores` con `{ game: "asteroids", score, name, at }`; "JUGAR DE NUEVO" reinicia una partida nueva desde 0.
+- [x] `/jugar/rocas` (y cualquier otro `id`) sigue mostrando la simulación mock con marcador automático, sin regresiones.
+- [x] Al salir de `/jugar/asteroids` (navegar fuera) se cancela el `requestAnimationFrame` y se quitan los listeners de teclado (sin fugas ni errores en consola).
+- [x] `npm run build` completa sin errores de TypeScript ni de ESLint y no hay errores en la consola del navegador.
 
 ## Decisiones tomadas y descartadas
 
