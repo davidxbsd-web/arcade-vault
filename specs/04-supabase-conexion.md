@@ -16,7 +16,7 @@ Arcade Vault va a necesitar Supabase para auth, perfiles y puntuaciones reales, 
 - Nuevas dependencias en `package.json`: `@supabase/supabase-js` y `@supabase/ssr` (patrón oficial para Next.js App Router).
 - Dos variables públicas de entorno, con prefijo `NEXT_PUBLIC_` porque el cliente browser las necesita:
   - `NEXT_PUBLIC_SUPABASE_URL` = `https://fxjkniebncdtryidhcsl.supabase.co`
-  - `NEXT_PUBLIC_SUPABASE_ANON_KEY` = la publishable key del proyecto (`sb_publishable_...`), no la legacy anon JWT.
+  - `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` = la publishable key del proyecto (`sb_publishable_...`), no la legacy anon JWT.
 - `.env.example` (versionado): se añaden las dos variables con la URL real y la key vacía, más un comentario con el enlace al dashboard.
 - `.env.local` (no versionado): las dos variables con sus valores reales para desarrollo.
 - `lib/supabase/client.ts`: helper `createClient()` para componentes de cliente, usando `createBrowserClient` de `@supabase/ssr` y las dos variables `NEXT_PUBLIC_`.
@@ -43,7 +43,7 @@ Esta spec no introduce estructuras de datos ni esquema en Supabase. Solo configu
 ```txt
 # .env.local (no versionado) y plantilla en .env.example
 NEXT_PUBLIC_SUPABASE_URL=https://fxjkniebncdtryidhcsl.supabase.co
-NEXT_PUBLIC_SUPABASE_ANON_KEY=sb_publishable_xxxxxxxx   # publishable key, dashboard > API Keys
+NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=sb_publishable_xxxxxxxx   # publishable key, dashboard > API Keys
 ```
 
 Respuesta del route handler:
@@ -55,16 +55,16 @@ type HealthResponse = { ok: true } | { ok: false; error: string };
 ## Plan de implementación
 
 1. **Dependencias.** `npm install @supabase/supabase-js @supabase/ssr`. `npm run build` sigue pasando (aún sin usar los paquetes).
-2. **Variables de entorno.** Añadir `NEXT_PUBLIC_SUPABASE_URL` y `NEXT_PUBLIC_SUPABASE_ANON_KEY` a `.env.example` (URL real, key vacía, comentario con enlace al dashboard) y a `.env.local` con los valores reales (URL + publishable key `sb_publishable_...`).
+2. **Variables de entorno.** Añadir `NEXT_PUBLIC_SUPABASE_URL` y `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` a `.env.example` (URL real, key vacía, comentario con enlace al dashboard) y a `.env.local` con los valores reales (URL + publishable key `sb_publishable_...`).
 3. **Helper browser.** Crear `lib/supabase/client.ts` con `createClient()` usando `createBrowserClient` y las dos variables `NEXT_PUBLIC_`.
 4. **Helper server.** Crear `lib/supabase/server.ts` con `createClient()` async usando `createServerClient`, `cookies()` de `next/headers` y el patrón `getAll`/`setAll` (con `setAll` en try/catch).
 5. **Route handler de salud.** Crear `app/api/supabase/health/route.ts` con `GET` que usa el helper de servidor, llama a `supabase.auth.getUser()`, y devuelve `200 { ok: true }` o `503 { ok: false, error }`. Añadir `export const dynamic = "force-dynamic"`.
-6. **Verificación.** Con `.env.local` completo, `npm run dev` y `curl -s -w "\n%{http_code}" http://localhost:3000/api/supabase/health` devuelve `{"ok":true}` y `200`. Borrar temporalmente `NEXT_PUBLIC_SUPABASE_ANON_KEY` y confirmar `503` con `ok:false`. Restaurar. `npm run build` y `npx eslint` pasan.
+6. **Verificación.** Con `.env.local` completo, `npm run dev` y `curl -s -w "\n%{http_code}" http://localhost:3000/api/supabase/health` devuelve `{"ok":true}` y `200`. Borrar temporalmente `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` y confirmar `503` con `ok:false`. Restaurar. `npm run build` y `npx eslint` pasan.
 
 ## Criterios de aceptación
 
 - [ ] `@supabase/supabase-js` y `@supabase/ssr` aparecen en `dependencies` de `package.json` y están instalados.
-- [ ] `.env.example` (versionado) contiene `NEXT_PUBLIC_SUPABASE_URL` con la URL real y `NEXT_PUBLIC_SUPABASE_ANON_KEY` vacía, con un comentario que indica de dónde sacar la key.
+- [ ] `.env.example` (versionado) contiene `NEXT_PUBLIC_SUPABASE_URL` con la URL real y `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` vacía, con un comentario que indica de dónde sacar la key.
 - [ ] `.env.local` contiene ambas variables con valores reales y **no** está versionado.
 - [ ] Existen `lib/supabase/client.ts` y `lib/supabase/server.ts`, cada uno exportando `createClient`.
 - [ ] `GET http://localhost:3000/api/supabase/health` con las variables bien puestas responde `200` y body `{"ok":true}`.
