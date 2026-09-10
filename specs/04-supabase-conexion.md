@@ -1,6 +1,6 @@
 # 04 — Conexión con Supabase
 
-- **Estado:** Aprobado
+- **Estado:** Implementado
 - **Depende de:** —
 - **Fecha:** 2026-09-09
 - **Objetivo:** Instalar los paquetes de Supabase, crear los helpers de cliente server/browser y las dos variables públicas de entorno, y exponer un route handler `/api/supabase/health` que confirme que la conexión al proyecto funciona.
