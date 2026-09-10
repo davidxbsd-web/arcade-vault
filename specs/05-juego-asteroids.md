@@ -1,6 +1,6 @@
 # 05 — Juego Asteroids (jugable)
 
-- **Estado:** Aprobado
+- **Estado:** Implementado
 - **Depende de:** SPEC 01, SPEC 02
 - **Fecha:** 2026-09-09
 - **Objetivo:** Portar el juego de canvas `references/started-games/02-asteroids/game.js` a TypeScript como un componente React montado condicionalmente en el Reproductor, y darlo de alta como un juego nuevo (`asteroids`) del catálogo, jugable de verdad en `/jugar/asteroids`.
