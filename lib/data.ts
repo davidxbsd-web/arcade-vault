@@ -9,14 +9,12 @@ export type Game = {
   best: number;
   plays: string;
 };
-
 export type ScoreRow = {
   rank: number;
   name: string;
   score: number;
   date: string;
 };
-
 export const GAMES: Game[] = [
   {
     id: "bloque-buster",
@@ -106,16 +104,45 @@ export const GAMES: Game[] = [
     best: 24,
     plays: "4.2K",
   },
+  {
+    id: "asteroids",
+    title: "ASTEROIDS",
+    short: "Rota, propulsa y destroza rocas en gravedad cero.",
+    long: "Pilota una nave triangular a la deriva en el vacío. Dispara para partir los asteroides gigantes en fragmentos cada vez más veloces, esquiva los escombros y atrapa el power-up de disparo triple antes de que el campo te sepulte. El espacio es toroidal: lo que sale por un borde vuelve por el opuesto.",
+    cat: "SHOOTER",
+    cover: "cover-rocas",
+    color: "yellow",
+    best: 39750,
+    plays: "10.2K",
+  },
 ];
-
-export const CATS: string[] = ["TODOS", "ARCADE", "PUZZLE", "SHOOTER", "VERSUS"];
-
+export const CATS: string[] = [
+  "TODOS",
+  "ARCADE",
+  "PUZZLE",
+  "SHOOTER",
+  "VERSUS",
+];
 export const PLAYERS: string[] = [
-  "PX_KAI", "NEONFOX", "Z3R0COOL", "M00NRYU", "VAULT_07", "GLITCHA",
-  "ATARI_KID", "CYBER_LU", "MAGENTA88", "SCANLINE", "BIT_LORD", "ARKADYA",
-  "DROID_X", "RGB_QUEEN", "PIXEL_DAD", "RETROVIRA", "VECTORX", "JOY_STK",
+  "PX_KAI",
+  "NEONFOX",
+  "Z3R0COOL",
+  "M00NRYU",
+  "VAULT_07",
+  "GLITCHA",
+  "ATARI_KID",
+  "CYBER_LU",
+  "MAGENTA88",
+  "SCANLINE",
+  "BIT_LORD",
+  "ARKADYA",
+  "DROID_X",
+  "RGB_QUEEN",
+  "PIXEL_DAD",
+  "RETROVIRA",
+  "VECTORX",
+  "JOY_STK",
 ];
-
 export function seededScores(seed: number, count = 12): ScoreRow[] {
   let s = seed;
   const rand = () => (s = (s * 9301 + 49297) % 233280) / 233280;
@@ -131,7 +158,12 @@ export function seededScores(seed: number, count = 12): ScoreRow[] {
     const score = base - i * Math.floor(2000 + rand() * 4000);
     const day = String(1 + Math.floor(rand() * 28)).padStart(2, "0");
     const mon = String(1 + Math.floor(rand() * 12)).padStart(2, "0");
-    rows.push({ rank: i + 1, name, score: Math.max(score, 1000), date: `${day}/${mon}/2026` });
+    rows.push({
+      rank: i + 1,
+      name,
+      score: Math.max(score, 1000),
+      date: `${day}/${mon}/2026`,
+    });
   }
   return rows
     .sort((a, b) => b.score - a.score)
