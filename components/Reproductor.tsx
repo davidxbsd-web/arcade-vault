@@ -12,6 +12,7 @@ export default function Reproductor({ game }: { game: Game }) {
   const [over, setOver] = useState(false);
   const [name, setName] = useState("INVITADO");
   const [saved, setSaved] = useState(false);
+  const [saveError, setSaveError] = useState<string | null>(null);
   // Cambiar este valor remonta <Asteroids> y arranca una partida nueva.
   const [runKey, setRunKey] = useState(0);
   useEffect(() => {
@@ -37,9 +38,25 @@ export default function Reproductor({ game }: { game: Game }) {
     setPaused(false);
     setOver(false);
     setSaved(false);
+    setSaveError(null);
     setRunKey((k) => k + 1);
   };
-  const saveScore = () => {
+  const saveScore = async () => {
+    if (isAsteroids) {
+      setSaveError(null);
+      try {
+        const res = await fetch("/api/scores", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ gameId: game.id, playerName: name, score }),
+        });
+        if (!res.ok) throw new Error();
+        setSaved(true);
+      } catch {
+        setSaveError("No se pudo guardar la puntuación. Intenta de nuevo.");
+      }
+      return;
+    }
     try {
       const all = JSON.parse(localStorage.getItem("av_scores") || "[]");
       all.push({ game: game.id, score, name, at: Date.now() });
@@ -152,6 +169,18 @@ export default function Reproductor({ game }: { game: Game }) {
                 <button className="btn yellow" onClick={saveScore}>
                   GUARDAR PUNTUACIÓN
                 </button>
+                {saveError && (
+                  <div
+                    className="mono"
+                    style={{
+                      color: "var(--magenta)",
+                      fontSize: 11,
+                      marginTop: 8,
+                    }}
+                  >
+                    {saveError}
+                  </div>
+                )}
               </div>
             ) : (
               <div className="toast-saved">▸ PUNTUACIÓN GUARDADA_</div>
