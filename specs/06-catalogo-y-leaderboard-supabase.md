@@ -1,6 +1,6 @@
 # 06 — Catálogo de juegos y leaderboard en Supabase
 
-- **Estado:** Aprobado
+- **Estado:** Implementado
 - **Depende de:** SPEC 01, SPEC 02, SPEC 04, SPEC 05
 - **Fecha:** 2026-10-13
 - **Objetivo:** Mover el catálogo de juegos (`GAMES`) y las puntuaciones reales de Asteroids a dos tablas de Supabase (`games` y `scores`), para que `/biblioteca`, `/salon`, `/juegos/[id]` y `/jugar/[id]` lean el catálogo desde la base de datos y el leaderboard de Asteroids muestre partidas reales en vez de datos simulados.
