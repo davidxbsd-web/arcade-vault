@@ -1,11 +1,11 @@
 import { notFound } from "next/navigation";
-import { GAMES } from "@/lib/data";
+import { createClient } from "@/lib/supabase/server";
+import { getGameById } from "@/lib/supabase/games";
 import Reproductor from "@/components/Reproductor";
-
 export default async function JugarPage({ params }: PageProps<"/jugar/[id]">) {
   const { id } = await params;
-  const game = GAMES.find((g) => g.id === id);
+  const supabase = await createClient();
+  const game = await getGameById(supabase, id);
   if (!game) notFound();
-
   return <Reproductor game={game} />;
 }
