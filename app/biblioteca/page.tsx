@@ -1,21 +1,29 @@
 "use client";
-
-import { useMemo, useState } from "react";
-import { CATS, GAMES } from "@/lib/data";
+import { useEffect, useMemo, useState } from "react";
+import { CATS } from "@/lib/data";
+import type { Game } from "@/lib/data";
+import { createClient } from "@/lib/supabase/client";
+import { getGames } from "@/lib/supabase/games";
 import GameCard from "@/components/GameCard";
-
 export default function BibliotecaPage() {
   const [q, setQ] = useState("");
   const [cat, setCat] = useState("TODOS");
-
+  const [games, setGames] = useState<Game[] | null>(null);
+  const [error, setError] = useState<string | null>(null);
+  useEffect(() => {
+    const supabase = createClient();
+    getGames(supabase)
+      .then(setGames)
+      .catch(() => setError("No se pudieron cargar los juegos."));
+  }, []);
   const filtered = useMemo(() => {
-    return GAMES.filter(
+    if (!games) return [];
+    return games.filter(
       (g) =>
         (cat === "TODOS" || g.cat === cat) &&
-        g.title.toLowerCase().includes(q.toLowerCase())
+        g.title.toLowerCase().includes(q.toLowerCase()),
     );
-  }, [q, cat]);
-
+  }, [games, q, cat]);
   return (
     <div className="fade-in">
       <section className="av-hero">
@@ -24,7 +32,6 @@ export default function BibliotecaPage() {
           INSERTA UNA MONEDA PARA JUGAR <span className="blink">_</span>
         </div>
       </section>
-
       <div className="av-filters">
         <div className="av-search">
           <span className="ico">⌕</span>
@@ -46,12 +53,35 @@ export default function BibliotecaPage() {
           ))}
         </div>
       </div>
-
       <div className="av-grid">
-        {filtered.map((g) => (
-          <GameCard key={g.id} game={g} />
-        ))}
-        {filtered.length === 0 && (
+        {games === null && !error && (
+          <div
+            className="pixel"
+            style={{
+              gridColumn: "1 / -1",
+              textAlign: "center",
+              padding: 80,
+              color: "var(--ink-faint)",
+            }}
+          >
+            CARGANDO…
+          </div>
+        )}
+        {error && (
+          <div
+            style={{
+              gridColumn: "1 / -1",
+              textAlign: "center",
+              padding: 80,
+              color: "var(--ink-faint)",
+            }}
+          >
+            {error}
+          </div>
+        )}
+        {games !== null &&
+          filtered.map((g) => <GameCard key={g.id} game={g} />)}
+        {games !== null && filtered.length === 0 && (
           <div
             style={{
               gridColumn: "1 / -1",
@@ -62,7 +92,11 @@ export default function BibliotecaPage() {
           >
             <div
               className="pixel"
-              style={{ fontSize: 14, color: "var(--magenta)", marginBottom: 12 }}
+              style={{
+                fontSize: 14,
+                color: "var(--magenta)",
+                marginBottom: 12,
+              }}
             >
               NO HAY RESULTADOS
             </div>
